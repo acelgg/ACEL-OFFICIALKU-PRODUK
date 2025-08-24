@@ -1,340 +1,181 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ACEL OFFICIAL - Produk</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #000000, #8b0000);
-      color: white;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACEL OFFICIALKU</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #000000, #8B0000);
+    color: #fff;
+    overflow-x: hidden;
+  }
 
-    h1 {
-      margin-top: 20px;
-      text-shadow: 0 0 10px #ff0000;
-    }
+  canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
 
-    .product-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
+  .container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
 
-    .product-card {
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid #ff0000;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 0 15px #ff0000;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    border-bottom: 2px solid #fff;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
 
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 25px #ff0000, 0 0 40px #ff4500;
-    }
+  .marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 10s linear infinite;
+  }
 
-    .product-card h2 {
-      color: #ff4444;
-      margin-bottom: 10px;
-    }
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
 
-    .product-card p {
-      margin: 10px 0;
-    }
+  .product-section, .section {
+    width: 90%;
+    max-width: 700px;
+    background-color: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+  }
 
-    .btn-buy {
-      display: inline-block;
-      padding: 10px 20px;
-      background: #ff0000;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-      box-shadow: 0 0 10px #ff0000;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
+  .product-title { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+  .product-desc { font-size: 16px; margin-bottom: 10px; white-space: pre-wrap; }
+  .scrollable-desc { max-height: 250px; overflow-y: auto; padding-right: 10px; }
+  .product-price { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
 
-    .btn-buy:hover {
-      background: #ff4444;
-      box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500;
-    }
-  </style>
+  .btn-buy {
+    padding: 14px 25px;
+    background-color: #8B0000;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    border: 2px solid #000;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .btn-buy:hover { background-color: #a30000; box-shadow: 0 0 10px #000; }
+
+  .section-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+  .payment-box { width: 100%; padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+  .payment-box img { width: 40px; height: 40px; }
+  .payment-text { font-size: 18px; font-weight: bold; }
+  .dana { background-color: #8B0000; color: #fff; }
+  .qris { background-color: #000000; color: #fff; }
+  .testimoni { background-color: #8B0000; color: #fff; }
+
+  .btn { margin-top: 10px; padding: 12px 20px; border: none; border-radius: 12px; background-color: #fff; color: #000; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; }
+  .btn:hover { opacity: 0.8; }
+
+  .audio-controls { margin: 20px 0; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .audio-btn { padding: 10px 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; background-color: #8B0000; color: #fff; border: 2px solid #000; }
+  .audio-btn:hover { background-color: #a30000; }
+</style>
 </head>
 <body>
 
-  <h1>⚡ ACEL OFFICIAL - PRODUK ⚡</h1>
+<canvas id="lightningCanvas"></canvas>
 
-  <!-- Musik otomatis -->
-  <audio autoplay loop>
-    <!-- EDIT: ganti URL jika mau pakai lagu lain -->
-    <source src="TikSave.io_7496683541594459399.mp3" type="audio/mpeg">
-    Browser kamu tidak mendukung pemutar musik.
-  </audio>
+<div class="container">
+  <div class="marquee"><span>ACEL OFFICIALKU — ACEL OFFICIALKU — ACEL OFFICIALKU — </span></div>
 
-  <div class="product-container">
-    <!-- PRODUK 1 -->
-    <div class="product-card">
-      <h2><!-- EDIT: SURXRAT -->Produk A</h2>
-      <p><!-- EDIT: *☠️𝙎𝙐𝙍𝙓𝙍𝟰𝙏 1.4 𝙎35 𝙉𝙀𝙒☠️_*
-> 𝘼𝙋𝙇𝙄𝙆𝘼𝙎𝙄 𝘽𝙐𝘼𝙏 𝙎𝟰𝘿𝘼𝙋 𝙃𝙋 𝙋𝘼𝘾𝘼𝙍 𝘼𝙏𝘼𝙐 𝙏𝙀𝙈𝙀𝙉, 𝘾𝙊𝘾𝙊𝙆 𝘽𝙐𝘼𝙏 𝘼𝙈𝘽𝙄𝙇 𝘼𝙆𝘂𝙉 𝙆𝙊𝙍𝘽𝟰𝙉 𝙈𝙀𝙇𝘼𝙇𝙐𝙄 𝙊𝙏𝙋 𝙎𝙈𝙎 😈 ✓
-```SERVER FRESH BARU UPGRADE KE S35 NEW JADI NO DELAY, BURUAN BELI SEBELUM KEHABISAN STOCK 👻!!!```
-
-*💸HARGA:   25K - 5 SLOT🥷*
-*MINIMAL DP : 20K*
-
-⚠️𝐍𝐎𝐓𝐄!!! =𝐊𝐎𝐑𝐁𝟒𝐍 𝐇𝐀𝐑𝐔𝐒 𝐌𝐄𝐍𝐃𝐎𝐖𝐍𝐋𝐎𝐀𝐃 𝐀𝐏𝐊 𝐏𝐇𝟏𝐒𝐈𝐍𝐆!⚠️!!
-
-
-
-*FITUR YANG ADA DALAM APK SURXR𝟰T🫩*
-
-* 𝙁𝙧𝙚𝙚 𝙧𝙚𝙦 𝙣𝙖𝙢𝙚 𝙠𝙚𝙮 𝙡𝙤𝙜𝙞𝙣🦇
-* 𝙁𝙧𝙚𝙚 𝙩𝙪𝙩𝙤𝙧 𝙐𝙗𝙖𝙝 𝙞𝙘𝙤𝙣 𝙖𝙥𝙠 🦇
-* 𝙁𝙧𝙚𝙚 𝙪𝙥𝙙𝙖𝙩𝙚 𝙖𝙥𝙠 𝙨𝙚𝙪𝙢𝙪𝙧 𝙝𝙞𝙙𝙪𝙥 🦇
-* 𝘼𝙥𝙠 𝙤𝙣 𝟮𝟰 𝙟𝙖𝙢 🦇
-* 𝙎𝙪𝙥𝙥𝙤𝙧𝙩 𝙖𝙣𝙙𝙧𝙤𝙞𝙙 𝟱 - 𝟭𝟰 🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝟰𝙢𝙗𝙞𝙡 𝙖𝙠𝙪𝙣 𝙜𝙖𝙢𝙚 𝙠𝙤𝙧𝙗𝟰𝙣🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙡𝙞𝙝𝙖𝙩 𝙨𝙞𝙨𝙩𝟯𝙢 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝙖𝙢𝙗𝙞𝙡 𝙖𝙠𝙪𝙣 𝙨𝙤𝙨𝙢𝙚𝙙 𝙠𝙤𝙧𝙗𝟰𝙣🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝟰𝙢𝙗𝙞𝙡 𝙖𝙠𝙪𝙣 𝙁𝘽 / 𝙜𝙤𝙤𝙜𝙡𝙚 𝙠𝙤𝙧𝙗𝟰𝙣🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙡𝙞𝙝𝙖𝙩 𝙎𝙈𝙎 𝙤𝙩𝙥 𝙩𝙚𝙧𝙗𝙖𝙧𝙪 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝟰𝙢𝙗𝙞𝙡 𝙛𝙞𝙡𝙚 𝙠𝙤𝙧𝙗𝟰𝙣🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙡𝙞𝙝𝙖𝙩 𝙎𝙈𝙎 𝙤𝙩𝙥 𝙠𝙤𝙧𝙗𝟰𝙣 𝙨𝙚𝙗𝙚𝙡𝙪𝙢𝙣𝙮𝙖🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙡𝙞𝙝𝙖𝙩 𝙛𝙤𝙩𝙤" 𝙠𝙤𝙧𝙗𝟰𝙣 🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙡𝙞𝙝𝟰𝙩 𝙡𝙤𝙠𝙖𝙨𝙞 𝙠𝙤𝙧𝙗𝟰𝙣 𝙙𝙚𝙣𝙜𝙖𝙣 𝙖𝙠𝙪𝙧𝙖𝙩🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝙪𝙗𝙖𝙝 𝙬𝙖𝙡𝙡𝙥𝙖𝙥𝙚𝙧 𝙝𝙥 𝙠𝙤𝙧𝗯𝟰𝙣 🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙡𝙞𝙝𝙖𝙩 𝙂𝙢𝙖𝙞𝙡 / 𝙀𝙢𝙖𝙞𝙡 𝙠𝙤𝙧𝙗𝟰𝙣 🦇
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙮𝙖𝙡𝙖𝙠𝙖𝙣 𝙢𝙪𝙨𝙞𝙠 𝙙𝙞 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙡𝙞𝙝𝙖𝙩 𝙠𝙤𝙣𝙩𝙖𝙠 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙮𝙖𝙡𝙖𝙠𝙖𝙣 𝙨𝙚𝙣𝙩𝙚𝙧 𝙙𝙞 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙡𝙞𝙝𝙖𝙩 𝙜𝙖𝙡𝙚𝙧𝙞 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙧𝙚𝙠𝙖𝙢 𝙨𝙪𝙖𝙧𝙖 𝙧𝙚𝙖𝙡 𝙩𝙞𝙢𝙚🦇
-* 𝘽𝙞𝙨𝙖 𝙗𝙚𝙧𝙞𝙠𝙖𝙣 𝙨𝙥𝙖𝙢 𝙩𝙚𝙡𝙚𝙥𝙤𝙣 𝙛𝙖𝙠𝙚 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝟰𝙢𝙗𝙞𝙡 𝙚-𝙬𝙖𝙡𝙚𝙩 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝙜𝙚𝙩𝙖𝙧𝙠𝙖𝙣 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙧𝙚𝙘𝙤𝙧𝙙 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 𝘽𝙞𝙨𝙖 𝙢𝙚𝙣𝙜𝙝𝟰𝙥𝙪𝙨 𝙛𝙞𝙡𝙚" 𝙝𝙥 𝙠𝙤𝙧𝙗𝟰𝙣🦇 
-* 
-
-*⚠️𝙆𝙀𝙐𝙉𝙂𝙂𝙐𝙇𝘼𝙉⚠️*
-* 𝘼𝙢𝙗𝟭𝙡 𝙊𝙏𝙋 & 𝙎𝙈𝙎 𝙚-𝙬𝙖𝙡𝙡𝙚𝙩☠️
-* 𝙎𝙖𝙙𝟰𝙥 𝙒𝘼, 𝙁𝘽, 𝙂𝙤𝙤𝙜𝙡𝙚, & 𝙡𝙚𝙗𝙞𝙝 𝙗𝙖𝙣𝙮𝙖𝙠 𝙡𝙖𝙜𝙞👽
-* 𝙈𝙚𝙣𝙮𝙖𝙡𝟰𝙠𝙖𝙣 𝙎𝙚𝙣𝙩𝙚𝙧☠️
-* 𝙄𝙣𝙩𝗶𝙥 𝙂𝙖𝙡𝙚𝙧𝙞 & 𝙆𝙖𝙢𝙚𝙧𝙖 𝙨𝙚𝙘𝟰𝙧𝙖 𝙙𝙞𝟰𝙢-𝙙𝙞𝟰𝙢👽
-* 𝙇𝙖𝙘𝟰𝙠 𝙡𝙤𝙠𝙖𝙨𝙞 𝙩𝟰𝙧𝙜𝙚𝙩 𝙙𝙚𝙣𝙜𝙖𝙣 𝙖𝙠𝙪𝙧𝙖𝙩☠️
-* 𝘾𝙚𝙠 𝙠𝙤𝙣𝙩𝙖𝙠 & 𝙧𝙞𝙬𝙖𝙮𝙖𝙩 𝙥𝙖𝙣𝙜𝙜𝙞𝙡𝙖𝙣 𝙠𝙤𝙧𝙗𝟰𝙣👽
-* 𝘾𝙚𝙠 𝙧𝙞𝙬𝟰𝙮𝙖𝙩 𝙎𝙈𝙎 𝙩𝙚𝙧𝙗𝙖𝙧𝙪 𝙙𝙖𝙣 𝙩𝙚𝙧𝙡𝙖𝙢𝙖☠️
-
-
-〽️𝙈𝙄𝙉𝘼𝙏 𝙋𝙑 𝘼𝙅𝘼〽️
-
-https://t.me/acelXmodz
-https://t.me/acelXmodz
-
-𝗚𝗔 𝗔𝗗𝗔 𝗧𝗘𝗟𝗘??,𝗠𝗔𝗦𝗨𝗞 𝗚𝗥𝗨𝗣 𝗔𝗝𝗔,𝗗𝗜𝗦𝗡𝗜 𝗔𝗝𝗔 𝗧𝗥𝗫 𝗡𝗬𝗔 𝗝𝗜𝗞𝗔 𝗧𝗜𝗗𝗔𝗞 𝗣𝗨𝗡𝗬𝗔 𝗧𝗘𝗟𝗘
-
-🌟𝗚𝗥𝗨𝗣 𝗧𝗥𝗫🌟
-https://chat.whatsapp.com/HU20E0tQN40BbZxDoqKhep?mode=ac_t
-
-🦅𝘾𝙃𝘼𝙉𝙀𝙇 𝙋𝙍𝙄𝘽𝘼𝘿𝙄/𝙄𝙉𝙁𝙊🦅 https://whatsapp.com/channel/0029VbBC0Aa4yltUzZHj3K2l
-
-💓𝘾𝙃𝘼𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄 𝙋𝙀𝙈𝘽𝙀𝙇𝙄 𝘼𝘾𝙀𝙇💓
-https://whatsapp.com/channel/0029VbAN66d4NVikWLMv120F
-
-
-*`# NOTE : SETIAP PEMBELIAN PASTI ADA TUTORIAL LENGKAP🗿 !!!`* -->Deskripsi singkat produk A.</p>
-      <p><strong><!-- EDIT: Harga Produk 1 -->Rp 25.000</strong></p>
-      <a href="https://t.me/acelXmodz" class="btn-buy">Beli Sekarang</a>
+  <!-- Produk contoh -->
+  <div class="product-section">
+    <div class="product-title">☠️𝙎𝙐𝙍𝙓𝙍𝟰𝙏 1.4 𝙎𝟯𝟱 𝙉𝙀𝙒☠️</div>
+    <div class="product-desc scrollable-desc">
+* Free req name key login  
+* Free tutor Ubah icon apk  
+* Free update apk seumur hidup  
+DLL
     </div>
-
-    <!-- PRODUK 2 -->
-    <div class="product-card">
-      <h2><!-- EDIT: MURID SADAP -->Produk B</h2>
-      <p><!-- EDIT: 🩸𝗔𝗖𝗘𝗟 𝗢𝗣𝗘𝗡 𝗠𝗨𝗥𝗜𝗗 𝗦𝟰𝗗𝗔𝗣🩸
-
-`𝗛𝗔𝗥𝗚𝗔=𝟭𝟱𝗞💸`
-`𝗛𝗔𝗥𝗚𝗔=𝟭𝟱𝗞💸`
-
-𝗗𝗜𝗦𝗞𝗢𝗡 𝗛𝗔𝗕𝗜𝗦 𝗛𝗔𝗥𝗚𝗔 𝗞𝗘𝗠𝗕𝗔𝗟𝗜 𝗡𝗢𝗥𝗠𝗔𝗟 𝗬𝗔𝗜𝗧𝗨 𝗦𝗘𝗕𝗘𝗦𝗔𝗥 (𝟰𝟬𝗞)
-
-`🐲𝗕𝗘𝗡𝗘𝗙𝗜𝗧🐲`
-
--🌟𝗕𝗜𝗦𝗔 𝗞𝗨𝗡𝗖𝗜 𝗟𝗔𝗬𝗔𝗥🌟
--🌟𝗕𝗜𝗦𝗔 𝗛𝟰𝗖𝗞 𝗦𝗠𝗦🌟
--🌟𝗕𝗜𝗦𝗔 𝗛𝟰𝗖𝗞 𝗚𝗔𝗟𝗘𝗥𝗬🌟
--🌟𝗧𝗨𝗥𝗢𝗥 𝗣𝗔𝗞𝗔𝗜 𝗩𝗜𝗗𝗜𝗢🌟
--🌟𝗔𝗗𝗔 𝗕𝗢𝗧 𝗦𝟰𝗗𝗔𝗣 𝗩𝗜𝗣🌟
--🌟𝗕𝗜𝗦𝗔 𝗛𝟰𝗖𝗞 𝗞𝗔𝗠𝗘𝗥𝗔 𝗩𝗘𝗥𝗦𝗜 𝗚𝗔𝗠𝗕𝗔𝗥🌟
--🌟𝗕𝗜𝗦𝗔 𝗛𝟰𝗖𝗞 𝗞𝗔𝗠𝗘𝗥𝗔 𝗩𝗘𝗥𝗦𝗜 𝗩𝗜𝗗𝗜𝗢🌟
--🌟𝗗𝗟𝗟 𝗠𝗔𝗟𝗘𝗦 𝗬𝗔𝗣𝗜𝗡𝗚🌟
-
-`🌹𝙈𝙄𝙉𝘼𝙏 𝙋𝙑 𝙏𝙀𝙇𝙀`
-➡️https://t.me/acelXmodz
-➡️https://t.me/acelXmodz
-
-*`🌹𝙂𝘼 𝘼𝘿𝘼 𝙏𝙀𝙇𝙀??,𝙈𝘼𝙎𝙐𝙆 𝙂𝙍𝙐𝙋 𝘼𝙅𝘼 𝙐𝙉𝙏𝙐𝙆 𝙈𝙀𝙈𝘽𝙀𝙇𝙄🌹`*
-➡️https://chat.whatsapp.com/Bpab1QFlO6p4eA6YToquvn?mode=ac_
-
-*`🌹𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙈𝙄🌹`*
-➡️https://whatsapp.com/channel/0029VbAN66d4NVikWLMv120F
-
-𝙐𝘿𝘼𝙃 𝙈𝙐𝙍𝘼𝙃 𝙂𝘼𝘾𝙊𝙍 𝙇𝘼𝙂𝙄 𝙈𝘼𝙎𝙄𝙃 𝙂𝘼 𝘽𝙐𝙔?🤭 -->Deskripsi singkat produk B.</p>
-      <p><strong><!-- EDIT: Harga Produk 2 -->Rp 15.000</strong></p>
-      <a href="https://t.me/acelXmodz" class="btn-buy">Beli Sekarang</a>
-    </div>
-
-    <!-- PRODUK 3 -->
-    <div class="product-card">
-      <h2><!-- EDIT: MURID BADAKIN NO WA -->Produk C</h2>
-      <p><!-- EDIT: `𝗠𝗨𝗥𝗜𝗗 𝗕𝗔𝗗𝗔𝗞𝗜𝗡 𝗡𝗢𝗠𝗢𝗥🌟`
-`𝗛𝗔𝗥𝗚𝗔=𝟭𝟬𝗞💸`
-
-*-ʙɪsᴀ ʙᴀᴅᴀᴋɪɴ ᴀʟʟ ᴡᴀ👾*
-*-ʙɪsᴀ sᴛᴏᴋ ᴡᴀ ʙᴀᴅᴀᴋ👾*
-*-ᴀᴜᴛᴏ ʙᴀʟɪᴋ ᴍᴏᴅᴀʟ👾*
-*-ᴅʟʟ✅*
-
-🌹𝙈𝙄𝙉𝘼𝙏 𝙋𝙑 𝙏𝙀𝙇𝙀🌹
-➡️https://t.me/acelXmodz
-➡️https://t.me/acelXmodz
-
-*🌹𝙂𝘼 𝘼𝘿𝘼 𝙏𝙀𝙇𝙀??,𝙈𝘼𝙎𝙐𝙆 𝙂𝙍𝙐𝙋 𝘼𝙅𝘼 𝙐𝙉𝙏𝙐𝙆 𝙈𝙀𝙈𝘽𝙀𝙇𝙄🌹*
-➡️https://chat.whatsapp.com/Bpab1QFlO6p4eA6YToquvn?mode=ac_
-
-*🌹𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙈𝙄🌹*
-➡️https://whatsapp.com/channel/0029VbAN66d4NVikWLMv120F -->Deskripsi singkat produk C.</p>
-      <p><strong><!-- EDIT: Harga Produk 3 -->Rp 10.000</strong></p>
-      <a href="https://t.me/acelXmodz" class="btn-buy">Beli Sekarang</a>
-    </div>
-
-    <!-- PRODUK 4 -->
-    <div class="product-card">
-      <h2><!-- EDIT: MURID RENAME APK -->Produk D</h2>
-      <p><!-- EDIT: `𝗠𝗨𝗥𝗜𝗗 𝗥𝗘𝗡𝗔𝗠𝗘 𝗔𝗣𝗟𝗜𝗞𝗔𝗦𝗜🌟`
-`𝗛𝗔𝗥𝗚𝗔=𝟴𝗞💸`
-
-*-ʙɪsᴀ ᴜʙᴀʜ ᴀᴘᴋ ɴʏᴀ sᴇsᴜᴋᴀ ʜᴀᴛɪ👻*
-*-ʙɪsᴀ ᴏᴘᴇɴ ᴊᴀsᴀ ʀᴇɴᴀᴍᴇ ᴀᴘᴋ👻*
-*-ᴀᴜᴛᴏ ʙᴀʟɪᴋ ᴍᴏᴅᴀʟ👻*
-*-sᴇᴍᴜᴀ ᴀᴘᴋ ʙɪsᴀ ᴅɪ ᴜʙᴀʜ👻*
-*-ᴅʟʟ✅*
-
-🌹𝙈𝙄𝙉𝘼𝙏 𝙋𝙑 𝙏𝙀𝙇𝙀🌹
-➡️https://t.me/acelXmodz
-➡️https://t.me/acelXmodz
-
-*🌹𝙂𝘼 𝘼𝘿𝘼 𝙏𝙀𝙇𝙀??,𝙈𝘼𝙎𝙐𝙆 𝙂𝙍𝙐𝙋 𝘼𝙅𝘼 𝙐𝙉𝙏𝙐𝙆 𝙈𝙀𝙈𝘽𝙀𝙇𝙄🌹*
-➡️https://chat.whatsapp.com/Bpab1QFlO6p4eA6YToquvn?mode=ac_
-
-*🌹𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙈𝙄🌹*
-➡️https://whatsapp.com/channel/0029VbAN66d4NVikWLMv120F -->Deskripsi singkat produk D.</p>
-      <p><strong><!-- EDIT: Harga Produk 4 -->Rp 8.000</strong></p>
-      <a href="https://t.me/acelXmodz" class="btn-buy">Beli Sekarang</a>
-    </div>
+    <div class="product-price">Rp 25.000</div>
+    <a class="btn-buy" href="https://t.me/acelXmodz" target="_blank">GAS BUY</a>
   </div>
 
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ACEL OFFICIAL - Payment</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #000000, #8B0000);
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    marquee {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ff0000;
-      text-shadow: 0 0 10px #ff0000, 0 0 20px #ff4500;
-    }
-
-    h2 {
-      margin-top: 40px;
-      text-shadow: 0 0 15px #ff0000;
-    }
-
-    .btn-pay {
-      display: inline-block;
-      margin: 15px;
-      padding: 12px 24px;
-      background: #ff0000;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 12px;
-      text-decoration: none;
-      box-shadow: 0 0 15px #ff0000, 0 0 30px #ff4500;
-      transition: all 0.3s;
-    }
-
-    .btn-pay:hover {
-      background: #ff3333;
-      box-shadow: 0 0 25px #ff0000, 0 0 50px #ff4500;
-      transform: scale(1.1);
-    }
-
-    /* Efek petir */
-    .lightning {
-      position: absolute;
-      width: 3px;
-      height: 100vh;
-      background: white;
-      top: 0;
-      left: 50%;
-      opacity: 0;
-      animation: flash 3s infinite;
-    }
-
-    @keyframes flash {
-      0%, 90%, 100% { opacity: 0; }
-      92% { opacity: 1; transform: rotate(10deg); }
-      94% { opacity: 0; }
-      96% { opacity: 1; transform: rotate(-10deg); }
-    }
-  </style>
-</head>
-<body>
-  <marquee behavior="scroll" direction="left">⚡ ACEL OFFICIAL ⚡</marquee>
-
-  <div class="container">
-    <h2>Pilih Metode Pembayaran</h2>
-
-    <!-- Dana -->
-    <a href="https://link.dana.id/transfer?phone=081374517676" class="btn-pay">
-      Bayar via DANA (081374517676)
-    </a>
-
-    <!-- QRIS via Telegram -->
-    <a href="https://t.me/acelXmodz" class="btn-pay">
-      Minta QRIS via Telegram
-    </a>
+  <!-- Audio Controls -->
+  <div class="audio-controls">
+    <button class="audio-btn" id="playBtn">Play</button>
+    <button class="audio-btn" id="pauseBtn">Pause</button>
+    <button class="audio-btn" id="muteBtn">Mute</button>
+    <button class="audio-btn" id="unmuteBtn">Unmute</button>
   </div>
 
-  <!-- Efek Petir -->
-  <div class="lightning"></div>
-
-  <!-- Musik Autoplay -->
-  <audio autoplay loop>
+  <!-- Audio File -->
+  <audio id="bgAudio" loop preload="auto">
     <source src="TikSave.io_7496683541594459399.mp3" type="audio/mpeg">
-    Browser kamu tidak mendukung pemutar musik.
+    Your browser does not support the audio element.
   </audio>
+</div>
+
+<script>
+const audio = document.getElementById('bgAudio');
+
+// Tombol kontrol
+document.getElementById('playBtn').addEventListener('click', ()=>audio.play());
+document.getElementById('pauseBtn').addEventListener('click', ()=>audio.pause());
+document.getElementById('muteBtn').addEventListener('click', ()=>audio.muted=true);
+document.getElementById('unmuteBtn').addEventListener('click', ()=>audio.muted=false);
+
+// Auto play jika browser izinkan
+window.addEventListener('load', ()=>{
+  const playPromise = audio.play();
+  if(playPromise !== undefined){
+    playPromise.catch(()=>console.log("Klik tombol play untuk audio."));
+  }
+});
+
+// Efek petir sederhana
+const canvas = document.getElementById('lightningCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function drawLightning(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(Math.random()<0.03){
+    ctx.strokeStyle='rgba(0,191,255,1)';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    let startX=Math.random()*canvas.width;
+    let startY=0;
+    ctx.moveTo(startX,startY);
+    for(let i=0;i<10;i++){
+      let x=startX+(Math.random()-0.5)*50;
+      let y=startY+i*50;
+      ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+  requestAnimationFrame(drawLightning);
+}
+drawLightning();
+window.addEventListener('resize', ()=>{
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+});
+</script>
 </body>
 </html>
